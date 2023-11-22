@@ -1,12 +1,10 @@
 package dev.rhc.apiuser.service;
 
-import dev.rhc.apiuser.dto.UserDto;
 import dev.rhc.apiuser.exception.InvalidDataException;
 import dev.rhc.apiuser.exception.UserAlreadyExistsException;
 import dev.rhc.apiuser.exception.UserNotFoundException;
 import dev.rhc.apiuser.model.User;
 import dev.rhc.apiuser.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +15,17 @@ import java.util.UUID;
 
 @Service
 public class UserService {
+    @Value("${user.email.regex}")
+    private String emailRegex;
 
-    @Autowired
-    private UserRepository userRepository;
+    @Value("${user.password.regex}")
+    private String passwordRegex;
+
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User findById(Long id) {
         Optional<User> user = userRepository.findById(id);
@@ -57,13 +63,6 @@ public class UserService {
 
         return userRepository.save(user);
     }
-
-    @Value("${user.email.regex}")
-    private String emailRegex;
-
-    private final String passwordRegex = "^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$";
-
-    // ... Otros métodos ...
 
     private void validateEmail(String email) throws InvalidDataException {
         if (!email.matches(emailRegex)) {
