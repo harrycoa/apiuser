@@ -47,9 +47,6 @@ public class UserController {
             ApiResponse apiResponse = new ApiResponse(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
         }
-
-
-
     }
 
 

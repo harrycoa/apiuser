@@ -1,13 +1,18 @@
 package dev.rhc.apiuser.util;
 
+import dev.rhc.apiuser.dto.PhoneDto;
 import dev.rhc.apiuser.dto.UserDto;
 import dev.rhc.apiuser.dto.UserResponseDto;
+import dev.rhc.apiuser.model.Phone;
 import dev.rhc.apiuser.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -18,21 +23,21 @@ public class UserDtoConverter {
         this.modelMapper = modelMapper;
     }
 
-    public UserDto convertUserToDto(User user) {
-        return modelMapper.map(user, UserDto.class);
-    }
 
-    public List<UserDto> convertEntityToDtos(List<User> users) {
-        List<UserDto> list = new ArrayList<>();
-        for (User user : users) {
-            UserDto userDto = convertUserToDto(user);
-            list.add(userDto);
-        }
-        return list;
-    }
+
 
     public User convertUserToEntity(UserDto userDto) {
-        return modelMapper.map(userDto, User.class);
+        User user = modelMapper.map(userDto, User.class);
+
+        if (userDto.getPhones() != null && !userDto.getPhones().isEmpty()) {
+            user.setPhones(userDto.getPhones().stream().map(phoneDto -> {
+                Phone phone = modelMapper.map(phoneDto, Phone.class);
+                phone.setUser(user); // Establece la relación
+                return phone;
+            }).collect(Collectors.toSet()));
+        }
+
+        return user;
     }
 
     public User map(User userToUpdate, User user) {
@@ -49,5 +54,41 @@ public class UserDtoConverter {
         dto.setToken(user.getToken());
         dto.setActive(user.isActive());
         return dto;
+    }
+
+    public UserDto convertUserToDto(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setName(user.getName());
+        userDto.setEmail(user.getEmail());
+        userDto.setPassword(user.getPassword());
+        userDto.setToken(user.getToken());
+        userDto.setActive(user.isActive());
+        userDto.setPhones(convertPhonesToDto(user.getPhones()));
+        // ... setear otros campos necesarios
+        return userDto;
+    }
+
+    private List<PhoneDto> convertPhonesToDto(Set<Phone> phones) {
+        if (phones == null) {
+            return Collections.emptyList();
+        }
+        List<PhoneDto> list = new ArrayList<>();
+        for (Phone phone : phones) {
+            PhoneDto phoneDto = convertPhoneToDto(phone);
+            list.add(phoneDto);
+        }
+        return list;
+    }
+
+    private PhoneDto convertPhoneToDto(Phone phone) {
+        // Asume que PhoneDto es un DTO para Phone
+        PhoneDto phoneDto = new PhoneDto();
+        phoneDto.setId(phone.getId());
+        phoneDto.setNumber(phone.getNumber());
+        phoneDto.setCitycode(phone.getCitycode());
+        phoneDto.setCountrycode(phone.getCountrycode());
+        // ... setear otros campos necesarios
+        return phoneDto;
     }
 }

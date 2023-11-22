@@ -1,10 +1,12 @@
 package dev.rhc.apiuser.service;
 
+import dev.rhc.apiuser.config.JwtUtil;
 import dev.rhc.apiuser.exception.InvalidDataException;
 import dev.rhc.apiuser.exception.UserAlreadyExistsException;
 import dev.rhc.apiuser.exception.UserNotFoundException;
 import dev.rhc.apiuser.model.User;
 import dev.rhc.apiuser.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +25,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final JwtUtil jwtUtil;
+
+
+    public UserService(UserRepository userRepository, JwtUtil jwtUtil) {
+
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     public User findById(Long id) {
@@ -37,19 +44,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User save(User user) {
-        return userRepository.save(user);
-    }
-
-    public void delete(User user) {
-        userRepository.delete(user);
-    }
-
 
     public User createUser(User user) throws UserAlreadyExistsException, InvalidDataException {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException("El correo ya registrado");
         }
+
 
         validateEmail(user.getEmail());
         validatePassword(user.getPassword());
@@ -59,7 +59,9 @@ public class UserService {
         user.setModified(LocalDateTime.now());
         user.setLastLogin(LocalDateTime.now());
         user.setToken(UUID.randomUUID().toString());
+        user.setToken(jwtUtil.generateToken(user));
         user.setActive(true);
+        user.setPhones(user.getPhones());
 
         return userRepository.save(user);
     }
