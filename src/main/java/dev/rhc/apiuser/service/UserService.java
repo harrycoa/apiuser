@@ -52,12 +52,9 @@ public class UserService {
 
         validateEmail(user.getEmail());
         validatePassword(user.getPassword());
-
-        // Configura los campos adicionales como created, modified, lastLogin, etc.
         user.setCreated(LocalDateTime.now());
         user.setModified(LocalDateTime.now());
         user.setLastLogin(LocalDateTime.now());
-        user.setToken(UUID.randomUUID().toString());
         user.setToken(jwtUtil.generateToken(user));
         user.setActive(true);
         user.setPhones(user.getPhones());

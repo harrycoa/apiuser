@@ -1,18 +1,15 @@
 package dev.rhc.apiuser.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApiResponse {
     private String mensaje;
 
-    public ApiResponse(String mensaje) {
-        this.mensaje = mensaje;
-    }
-
-    // getters y setters
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
 }
