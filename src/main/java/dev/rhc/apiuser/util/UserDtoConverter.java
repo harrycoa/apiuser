@@ -24,8 +24,6 @@ public class UserDtoConverter {
     }
 
 
-
-
     public User convertUserToEntity(UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
 
@@ -37,11 +35,6 @@ public class UserDtoConverter {
             }).collect(Collectors.toSet()));
         }
 
-        return user;
-    }
-
-    public User map(User userToUpdate, User user) {
-        modelMapper.map(userToUpdate, user);
         return user;
     }
 
@@ -65,7 +58,6 @@ public class UserDtoConverter {
         userDto.setToken(user.getToken());
         userDto.setActive(user.isActive());
         userDto.setPhones(convertPhonesToDto(user.getPhones()));
-        // ... setear otros campos necesarios
         return userDto;
     }
 
@@ -82,13 +74,11 @@ public class UserDtoConverter {
     }
 
     private PhoneDto convertPhoneToDto(Phone phone) {
-        // Asume que PhoneDto es un DTO para Phone
         PhoneDto phoneDto = new PhoneDto();
         phoneDto.setId(phone.getId());
         phoneDto.setNumber(phone.getNumber());
         phoneDto.setCitycode(phone.getCitycode());
         phoneDto.setCountrycode(phone.getCountrycode());
-        // ... setear otros campos necesarios
         return phoneDto;
     }
 }
