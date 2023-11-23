@@ -3,13 +3,14 @@ package dev.rhc.apiuser.dto;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-    private Long id;
+    private UUID id;
     private String name;
     private String email;
     private String password;

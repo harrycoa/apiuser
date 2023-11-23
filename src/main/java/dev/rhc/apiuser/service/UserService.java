@@ -34,7 +34,7 @@ public class UserService {
         this.jwtUtil = jwtUtil;
     }
 
-    public User findById(Long id) {
+    public User findById(UUID id) {
         Optional<User> user = userRepository.findById(id);
         return user
                 .orElseThrow(() -> new UserNotFoundException("User not found"));

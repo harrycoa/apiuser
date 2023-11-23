@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
 public class UserController {
@@ -26,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<UserDto> findById(@PathVariable("id") UUID id) {
         User user = userService.findById(id);
         return new ResponseEntity<>(userDtoConverter.convertUserToDto(user), org.springframework.http.HttpStatus.OK);
     }
@@ -48,9 +50,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
         }
     }
-
-
-
-
 
 }
