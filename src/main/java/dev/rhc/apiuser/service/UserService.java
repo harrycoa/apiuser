@@ -6,7 +6,6 @@ import dev.rhc.apiuser.exception.UserAlreadyExistsException;
 import dev.rhc.apiuser.exception.UserNotFoundException;
 import dev.rhc.apiuser.model.User;
 import dev.rhc.apiuser.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

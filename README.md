@@ -129,3 +129,6 @@ curl --location 'http://localhost:8080/user/50da4f40-add8-40b8-8bbd-45225865dedc
 --header 'Cookie: JSESSIONID=2328D42CF5CA13D4E3CEC65BE5F508BA'
 ```
 
+
+
+### URL SWAGGER: http://localhost:8080/swagger-ui/

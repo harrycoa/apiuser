@@ -1,0 +1,41 @@
+@startuml
+!define SPRING
+skinparam class {
+    BackgroundColor PaleGreen
+    ArrowColor SeaGreen
+    BorderColor SpringGreen
+}
+
+class UserController {
+    + findById(Long id): ResponseEntity<UserDto>
+    + createUser(UserDto userDto): ResponseEntity<?>
+}
+
+class UserService {
+    + findById(Long id): User
+    + createUser(User user): User
+}
+
+class UserRepository {
+    + findById(Long id): Optional<User>
+    + save(User user): User
+}
+
+class UserDtoConverter {
+    + convertUserToDto(User user): UserDto
+    + convertUserToEntity(UserDto userDto): User
+    + convertUserToResponseDto(User user): UserResponseDto
+}
+
+class User
+class UserDto
+class UserResponseDto
+
+UserController --> UserService : uses
+UserService --> UserRepository : uses
+UserController --> UserDtoConverter : uses
+UserDtoConverter --> User
+UserDtoConverter --> UserDto
+UserDtoConverter --> UserResponseDto
+UserRepository --> User : data access
+@enduml
