@@ -2,7 +2,7 @@
   title: Some Title
   team: []
   icon: DefaultBlueprint
-  blueprint: custom
+  blueprint: branches
   properties:
     readme: string
     url: https://example.com
